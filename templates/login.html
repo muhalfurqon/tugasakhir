@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!---Coding By CoderGirl | www.codinglabweb.com--->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login & Registration Form | CoderGirl</title>
+  <!---Custom CSS File--->
+  <link rel="stylesheet" href="static/css/style_login.css">
+</head>
+
+<body>
+  <div class="container">
+    <input type="checkbox" id="check">
+    <div class="login form">
+      <header>Login</header>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <p
+          style="text-align:center;padding:10px;background-color:#acfa96;margin:10px;border-radius:10px;color:#009579">
+          {{ message }}
+        </p>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+      {% if error %}
+      <p
+        style="text-align:center;padding:10px;background-color:#e36b7b;margin:10px;border-radius:10px;color:#fff">
+        {{ error }}
+      </p>
+      {% endif %}
+      <form action="{{ url_for('proses_login') }}" method="POST">
+        <input type="text" name="username" placeholder="Masukkan Username">
+        <input type="password" name="password" placeholder="Masukkan password">
+        <input type="submit" class="button" value="Login">
+      </form>
+      <div class="signup">
+        <span class="signup">Belum punya akun?
+          <label for="check">Register</label>
+        </span>
+      </div>
+    </div>
+    <div class="registration form">
+      <header>Register</header>
+
+      <form action="{{ url_for('proses_register') }}" method="POST">
+        <input type="text" name="username" placeholder="Masukkan Username Baru">
+        <input type="text" name="nama" placeholder="Masukkan Nama Anda">
+        <input type="text" name="alamat" placeholder="Masukkan Alamat Anda">
+        <input type="text" name="password" placeholder="Masukkan Password">
+        <input type="submit" class="button" value="Register">
+      </form>
+      <div class="signup">
+        <span class="signup">Sudah punya akun?
+          <label for="check">Login</label>
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

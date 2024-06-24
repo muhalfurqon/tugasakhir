@@ -1,0 +1,101 @@
+{% include 'header.html' %}
+<style>
+  .ticket-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      background-color: #ffffff;
+      border-radius: 10px;
+  }
+  .pending-badge {
+      background-color: #f0ad4e;
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+  .waiting-badge {
+      background-color: #f04ed2;
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+  .confirmed-badge {
+      background-color: #5cb85c;
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+</style>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    <h1>Diamond</h1>
+    <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/dashboard-admin">Home</a></li>
+        <li class="breadcrumb-item active">Detail Transaksi Pembelian</li>
+        </ol>
+    </nav>
+    </div><!-- End Page Title -->
+
+  <div class="container ticket-container">
+    <h2 class="text-center">Detail Transaksi</h2>
+    <p class="text-center">Informasi detail pesanan</p>
+
+    <div class="card">
+        <div class="card-body">
+            <span class="{% if transaction.status == 'pending' %}
+                pending-badge
+                {% elif transaction.status == 'waiting' %}
+                    waiting-badge
+                {% else %}
+                    confirmed-badge
+                {% endif %}">
+                {{ transaction.status }}
+            </span>
+            <h3 class="mt-3">{{ transaction.nama_diamond }}</h3>
+            <p>Nama Pengguna: {{ transaction.nama_pengguna }}</p>
+            <p>Jumlah Diamond: {{ transaction.jumlah_diamond }}</p>
+            <p>Total Bayar: Rp{{ transaction.total_harga }},00</p>
+            <p>Tanggal Pembelian: {{ transaction.tanggal_pembelian }}</p>
+
+            {% if transaction.bukti_transfer %}
+            <p>Bukti Transfer: <a href="{{ url_for('static', filename='admin-assets/imgBukti/' + transaction.bukti_transfer) }}" target="_blank">Lihat</a></p>
+            {% else %}
+            <p>Bukti Transfer: Belum diunggah</p>
+            {% endif %}
+
+            <!-- Tombol untuk mengubah status -->
+            {% if transaction.status == 'waiting' %}
+            <button class="btn btn-success mt-3 btn-ubah-status" data-id="{{ transaction._id }}">Ubah Status Menjadi Konfirmasi</button>
+            {% endif %}<br>
+
+            <a href="{{ url_for('generate_pdf', transaction_id=transaction._id) }}" class="btn btn-primary mt-3">Cetak PDF</a>
+        </div>
+    </div>
+</div>
+</main><!-- End #main -->
+
+<script>
+    // Tangani klik tombol Ubah Status dengan AJAX
+    document.querySelectorAll('.btn-ubah-status').forEach(button => {
+        button.addEventListener('click', async function() {
+            const transactionId = this.getAttribute('data-id');
+            const confirmChange = confirm('Apakah Anda yakin ingin mengubah status transaksi ini?');
+            if (confirmChange) {
+                const response = await fetch(`/ubah-status-transaksi/${transactionId}`, {
+                    method: 'POST',
+                });
+                const data = await response.json();
+                alert(data.message); // Tampilkan pesan dari server
+                // Reload halaman setelah 1 detik
+                setTimeout(() => {
+                    location.reload();
+                }, 1000); // Menggunakan timeout agar pesan alert terlihat sebelum reload
+            }
+        });
+    });
+</script>
+
+{% include 'footer.html' %}

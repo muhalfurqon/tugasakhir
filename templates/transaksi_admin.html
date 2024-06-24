@@ -1,0 +1,82 @@
+{% include 'header.html' %}
+<style>
+    .pending-badge {
+      background-color: #f0ad4e;
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+  .waiting-badge {
+      background-color: #f04ed2;
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+  .confirmed-badge {
+      background-color: #5cb85c;
+      color: #fff;
+      border-radius: 5px;
+      padding: 5px 10px;
+  }
+  </style>
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    <h1>Transaksi</h1>
+    <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/dashboard-admin">Home</a></li>
+        <li class="breadcrumb-item active">Daftar Transaksi</li>
+        </ol>
+    </nav>
+    </div><!-- End Page Title -->
+
+    <div class="tabel mt-4">
+    <div class="card border-0 shadow mb-4">
+        <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-centered table-nowrap mb-0 rounded mt-3">
+            <thead class="thead-light">
+                <tr>
+                <th class="border-0 rounded-start">No</th>
+                <th class="border-0">Nama Pembeli</th>
+                <th class="border-0">Nama Diamond</th>
+                <th class="border-0">Total Harga</th>
+                <th class="border-0">Tanggal Pembelian</th>
+                <th class="border-0">Status</th>
+                <th class="border-0 rounded-end text-center">Aksi</th>
+                </tr>
+            </thead>
+            {% for transaction in transaksi %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{ transaction.nama_pengguna }}</td>
+                <td>{{ transaction.nama_diamond }}</td>
+                <td>Rp.{{ transaction.total_harga }}</td>
+                <td>{{ transaction.tanggal_pembelian }}</td>
+                <td>
+                    <span class="{% if transaction.status == 'pending' %}
+                                    pending-badge
+                                {% elif transaction.status == 'waiting' %}
+                                    waiting-badge
+                                {% else %}
+                                    confirmed-badge
+                                {% endif %}">
+                        {{ transaction.status }}
+                    </span>
+                </td>                
+
+                <td class="text-center">
+                <a href="/detail-transaksi-admin/{{ transaction._id }}">
+                    <img src="https://img.icons8.com/plumpy/26/000000/edit-calendar.png" /></a>
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
+        </div>
+        </div>
+        <!-- /.card -->
+    </div>
+    </div>
+</main><!-- End #main -->
+{% include 'footer.html' %}

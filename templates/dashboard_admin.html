@@ -1,0 +1,32 @@
+{% include 'header.html' %}
+
+      <!-- Main Content -->
+      <main class="content">
+        <section class="banner">
+          <img src="/static/banner4.jpg" alt="MLBB Banner" />
+        </section>
+
+        
+    <script>
+      const banners = document.querySelectorAll(".banner img");
+      let currentBannerIndex = 0;
+
+      function showBanner() {
+        banners.forEach((banner, index) => {
+          banner.classList.toggle("active", index === currentBannerIndex);
+        });
+      }
+
+      function nextBanner() {
+        currentBannerIndex = (currentBannerIndex + 1) % banners.length;
+        showBanner();
+      }
+
+      // Show the first banner initially
+      showBanner();
+
+      // Change banner every 5 seconds
+      setInterval(nextBanner, 5000);
+    </script>
+
+{% include 'footer.html' %}
